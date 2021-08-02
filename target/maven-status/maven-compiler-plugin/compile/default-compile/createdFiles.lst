@@ -1,0 +1,8 @@
+paasta\msa\service\impl\UiServiceImpl.class
+paasta\msa\common\PaastaOthersExcepHndlr.class
+paasta\msa\service\UiService.class
+paasta\msa\common\RestClient.class
+paasta\msa\common\AuthAspect.class
+paasta\msa\common\CommonUtil.class
+paasta\msa\controller\UiController.class
+paasta\msa\common\PaastaExcepHndlr.class
