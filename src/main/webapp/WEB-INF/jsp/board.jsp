@@ -17,6 +17,18 @@ $(document).ready(function(){
 	$('#writeBtn').click(function(){
 		location.href = 'boardDetail';
 	});
+	
+	$('#btnJoin').click(function(){
+		location.href = 'user/join';
+	});
+	
+	$('#btnLogin').click(function(){
+		location.href = 'user/login';
+	});
+	
+	$('#btnLogout').click(function(){
+		location.href = 'user/logout';
+	});
 
 	$('#list').children('tr').click(function(){
 		location.href = 'boardDetail?boardSeq=' + $(this).attr("boardSeq");
@@ -59,7 +71,6 @@ $.fn.drawPagination = function() {
 		$.fn.search();
 	}
 }
-
 $.fn.search = function() {
 	$.ajax({
 	    url:'./boardJSON',
@@ -240,10 +251,18 @@ input[type=text] {
 
 </head>
 <body>
-	<div class="header"></div>
+	<div class="header" style="text-align: right; padding: 3px;">
+		<c:if test="${cookie.session_id.value eq null}">
+			<span id="btnJoin" style="float:left;" class="button">회원가입</span>
+			<span id="btnLogin" style="float:left;" class="button">로그인</span>
+		</c:if>
+		<c:if test="${cookie.session_id.value ne null}">
+			<span id="btnLogout" style="float:left;" class="button">로그아웃</span>
+		</c:if>
+ 	</div>
 	<div class="body">
 		<article>
-			<form id="search">
+			<form id="search"  action="javascript:return false;">
 				<div class="right"><span>총 <span id="countText">${resultData.boardCount}</span>건 조회되었습니다.</span></div>
 				<input type="hidden" id="count" value="${resultData.boardCount}">
 				<input type="hidden" id="page" name="page" value="${resultData.page}">
@@ -283,9 +302,11 @@ input[type=text] {
 						<option value="boardText">내용</option>
 						<option value="writeUserName">작성자</option>
 					</select>
-					<input type="text" name="searchValue" />
+					<input type="text" name="searchValue" onKeypress="javascript:if(event.keyCode==13) {$.fn.search();}"/>
 					<span id="selectBtn" class="button">검색</span>
-					<span id="writeBtn" class="button">등록</span>
+					<c:if test="${cookie.session_id.value ne null}">
+						<span id="writeBtn" class="button">등록</span>
+					</c:if>
 				</div>
 				<div id="pagination" class="pagination" page=""></div>
 			</form>

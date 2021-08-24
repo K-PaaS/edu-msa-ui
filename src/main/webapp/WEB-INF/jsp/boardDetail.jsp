@@ -29,6 +29,8 @@ $(document).ready(function(){
 			if(result) {
 				$('#writeForm').children('input[name="boardTitle"]').val($('#boardTitle').val());
 				$('#writeForm').children('input[name="boardText"]').val($('#boardText').val());
+				$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
+				$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
 				
 				$.ajax({
 				    url:'./boardUpdateJSON',
@@ -39,6 +41,8 @@ $(document).ready(function(){
 				    	if(data.result == 'SUCCESS') {
 				    		$('#titleSpan').text(data.resultData.boardTitle);
 				    		$('#textDiv').html(data.resultData.boardText);
+				    		$('#writeUserId').text(data.resultData.writeUserId);
+				    		$('#writeUserName').text(data.resultData.writeUserId);
 				    		
 							$('.write').hide();
 							$('.read').show();
@@ -57,6 +61,8 @@ $(document).ready(function(){
 			if(result) {
 				$('#writeForm').children('input[name="boardTitle"]').val($('#boardTitle').val());
 				$('#writeForm').children('input[name="boardText"]').val($('#boardText').val());
+				$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
+				$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
 				
 				$.ajax({
 				    url:'./boardCreateJSON',
@@ -66,9 +72,12 @@ $(document).ready(function(){
 				    success:function(data){
 				    	if(data.result == 'SUCCESS') {
 					    	alert(data.result);
+					    	console.log(data.resultData);
 				    		$('#titleSpan').text(data.resultData.boardTitle);
 				    		$('#textDiv').html(data.resultData.boardText);
 				    		$('#createDt').text(data.resultData.createDt);
+				    		$('#writeUserId').text(data.resultData.writeUserId);
+				    		$('#writeUserName').text(data.resultData.writeUserId);
 				    		
 							$('.write').hide();
 							$('.read').show();
@@ -80,6 +89,32 @@ $(document).ready(function(){
 				    }
 				});
 			}
+		}
+	});
+	$('#commentSubmit').click(function(){
+		// ajax 타는 부분
+		var result = confirm('댓글을 등록하시겠습니까?');			
+		if(result) {
+			var paramMap = new Map();
+			paramMap["comment"] = $('#comment-input').val();
+			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
+			paramMap["writeUserId"] = '${cookie.user_id.value}';
+			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			
+			console.log(paramMap);
+			$.ajax({
+			    url:'./comments',
+		        type:'post',
+		        data:paramMap,
+		        dataType:'json',
+			    success:function(data){
+			    	if(data.result == 'SUCCESS') {
+				    	alert(data.result);
+				    	console.log(data.resultData);
+			    		$('#titleSpan').text(data.resultData.boardTitle);
+			    	}
+			    }
+			}); 
 		}
 	});
 	
@@ -99,7 +134,8 @@ $(document).ready(function(){
 // 		alert($('#writeForm').serializeArray());
 		var result = confirm('삭제하시겠습니까?');			
 		if(result) {
-			alert($('#writeForm').serializeArray());
+			$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
+			$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
 			$.ajax({
 			    url:'./boardDeleteJSON',
 		        type:'post',
@@ -263,8 +299,8 @@ input[type=text] {
 	<div class="body">
 		<article>
 			<form id="writeForm">
-				<input type="hidden" name="writeUserName" value="송재무" /><!-- 추후 로그인 처리 후 로그인 사용자명 -->
-				<input type="hidden" name="writeUserId" value="sjm8824" /><!-- 추후 로그인 처리 후 로그인 사용자ID -->
+				<input type="hidden" name="writeUserName" value="${resultData.userName}" /><!-- 추후 로그인 처리 후 로그인 사용자명 -->
+				<input type="hidden" name="writeUserId" value="${resultData.userId}" /><!-- 추후 로그인 처리 후 로그인 사용자ID -->
 				<input type="hidden" name="boardSeq" value="${resultData.boardSeq}" />
 				<input type="hidden" id="writeType" value="${type}" />
 				<input type="hidden" name="boardTitle" />
@@ -277,7 +313,7 @@ input[type=text] {
 						</tr>
 						<tr class="read">
 							<th class="left">
-								<span class="read" style="font-weight:normal">송재무</span><!-- 추후 로그인 이름 처리 -->
+								<span class="read" style="font-weight:normal">${resultData.userName}</span><!-- 추후 로그인 이름 처리 -->
 							</th>
 							<th class="right"><span id="createDt" class="read" style="font-weight:normal">${resultData.createDt}</span></th>
 						</tr>
@@ -292,8 +328,24 @@ input[type=text] {
 					</tbody>
 				</table>
 				<div style="padding-top: 10px;float:left"><span id="listBtn" class="button">목록</span></div>
-				<div class="right" style="padding-top: 10px;"><span id="writeBtn" class="button">등록</span> <span id="deleteBtn" class="button" value="${resultData.boardSeq}">삭제</span><span id="cancelBtn" class="button" style="display:none;">취소</span></div>
+				<c:if test="${cookie.userId.value eq resultData.userId}">
+					<div class="right" style="padding-top: 10px;"><span id="writeBtn" class="button">등록</span> <span id="deleteBtn" class="button read" value="${resultData.boardSeq}">삭제</span><span id="cancelBtn" class="button" style="display:none;">취소</span></div>
+				</c:if>
 		</article>
+		<div id="commentArea" style="padding-top:30px;">
+			 <hr width = "100%" color = "black" size = "2">
+			<div id="commentHead">
+				<div id="comment-count">댓글 <span id="count">0</span></div>
+				<input id="comment-input" placeholder="댓글을 입력해 주세요." width="90%"> <button id="commentSubmit">등록</button>
+			</div>
+			<div id="cmmentLow1">
+				<div id="commentLow" style="text-align:left;">
+					<span style="display:inline-block;height:5%; width:90%;">댓글 내용</span>
+					<span><button id="submit">삭제</button></span>
+					<span><button id="submit">수정</button></span>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class="footer"></div>
 </body>
