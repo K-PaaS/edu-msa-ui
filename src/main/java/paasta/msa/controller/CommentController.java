@@ -100,12 +100,13 @@ public class CommentController {
 		return result;
 	}
 
-	@RequestMapping(value = "/comments/{commentSeq}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/updateComment")
 	@ResponseBody
 	public Map<String, Object> putComment(@RequestParam Map<String, String> paramMap) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 
+		System.out.println(paramMap);
 		// parameter Setting
 		try {
 
@@ -126,7 +127,8 @@ public class CommentController {
 		
 		try {
 			result = commentService.putComment(paramMap);
-			if(SUCCESS.equals(result.get("result"))) {
+			System.out.println(result);
+			if(!SUCCESS.equals(result.get("result"))) {
 				throw new Exception("코멘트 수정에 실패하였습니다.");
 			}
 			
@@ -139,40 +141,16 @@ public class CommentController {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/comments/{commentSeq}", method = RequestMethod.DELETE)
-	public Map<String, Object> deleteComment(@PathVariable("commentSeq") int commentSeq, HttpEntity<String> httpEntity) {
+	@RequestMapping(value = "/deleteComment")
+	@ResponseBody
+	public Map<String, Object> deleteComment(@RequestParam Map<String, String> paramMap) {
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = httpEntity.getBody();
-
-		Map<String, String> paramMap = new HashMap<String, String>();
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		
-		// parameter Setting
 		try {
-			if(jsonString ==  null || "".equals(jsonString)) {
-				jsonString = "{}";
-			}
-			Map<String, String> jsonMap = mapper.readValue(jsonString, Map.class);
-
-			// parameter Setting
-			String writeUserId = jsonMap.get("writeUserId");
-			paramMap.put("commentSeq", Integer.toString(commentSeq));
-			paramMap.put("writeUserId", writeUserId);
-		} catch (Exception e) {
-			result.put("result", "ERROR");
-			result.put("errMsg", "코멘트 삭제에 실패하였습니다.");
-			e.printStackTrace();
-
-			return result;
-		}
-
-		try {
-			
+			System.out.println(paramMap);
 			result = commentService.deleteComment(paramMap);
-			if(SUCCESS.equals(result.get("result"))) {
+			if(!SUCCESS.equals(result.get("result"))) {
 				throw new Exception("코멘트 삭제에 실패하였습니다.");
 			}
 			

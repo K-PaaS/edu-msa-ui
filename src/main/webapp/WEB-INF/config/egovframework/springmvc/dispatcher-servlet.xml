@@ -58,32 +58,5 @@
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
 
-    <!-- For Pagination Tag -->
-<!--     <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/> -->
-
-<!--     <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager"> -->
-<!--         <property name="rendererType"> -->
-<!--             <map> -->
-<!--                 <entry key="image" value-ref="imageRenderer"/> -->
-<!--             </map> -->
-<!--         </property> -->
-<!--     </bean> -->
-	<!-- /For Pagination Tag -->
-	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <!-- <property name="maxTotal" value="${redis.pool.maxTotal}"/>
-        <property name="maxIdle" value="${redis.pool.maxIdle}"/>
-        <property name="minIdle" value="${redis.pool.minIdle}"/> -->
-    </bean>
-	
-	<bean id="jedisFactory"	class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<property name="hostName" value="127.0.0.1" />
-		<property name="port" value="6379" />
-		<property name="password" value="redisadmin" />
-		<property name="poolConfig" ref="jedisPoolConfig"/>
-	</bean>
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="jedisFactory" />
-	</bean>
-
     <mvc:view-controller path="/cmmn/validator" view-name="cmmn/validator"/>
 </beans>

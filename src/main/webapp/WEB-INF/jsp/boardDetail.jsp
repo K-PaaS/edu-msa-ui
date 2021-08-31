@@ -118,6 +118,62 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#commentUpdate').click(function(){
+		// ajax 타는 부분
+		var result = confirm('댓글을 수정하시겠습니까?');			
+		if(result) {
+			var paramMap = new Map();
+			/* paramMap["commentSeq"] = $('#comment-input').val(); */
+			paramMap["commentSeq"] = 20;
+			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
+			paramMap["comment"] = "TESTTESTSETSETEST";
+			paramMap["writeUserId"] = '${cookie.user_id.value}';
+			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			
+			console.log(paramMap);
+			$.ajax({
+			    url:'./updateComment',
+		        type:'post',
+		        data:paramMap,
+		        dataType:'json',
+			    success:function(data){
+			    	if(data.result == 'SUCCESS') {
+				    	alert(data.result);
+				    	console.log(data.resultData);
+			    		$('#titleSpan').text(data.resultData.boardTitle);
+			    	}
+			    }
+			}); 
+		}
+	});
+	$('#commentDelete').click(function(){
+		// ajax 타는 부분
+		var result = confirm('댓글을 삭제하시겠습니까?');			
+		if(result) {
+			var paramMap = new Map();
+			/* paramMap["commentSeq"] = $('#comment-input').val(); */
+			paramMap["commentSeq"] = 21;
+			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
+			paramMap["writeUserId"] = '${cookie.user_id.value}';
+			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			
+			console.log(paramMap);
+			$.ajax({
+			    url:'./deleteComment',
+		        type:'post',
+		        data:paramMap,
+		        dataType:'json',
+			    success:function(data){
+			    	if(data.result == 'SUCCESS') {
+				    	alert(data.result);
+				    	console.log(data.resultData);
+			    		$('#titleSpan').text(data.resultData.boardTitle);
+			    	}
+			    }
+			}); 
+		}
+	});
+	
 	$('#cancelBtn').click(function(){
         $("form").each(function() {  
             this.reset();  
@@ -131,7 +187,6 @@ $(document).ready(function(){
 	});
 	
 	$('#deleteBtn').click(function(){
-// 		alert($('#writeForm').serializeArray());
 		var result = confirm('삭제하시겠습니까?');			
 		if(result) {
 			$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
@@ -341,8 +396,8 @@ input[type=text] {
 			<div id="cmmentLow1">
 				<div id="commentLow" style="text-align:left;">
 					<span style="display:inline-block;height:5%; width:90%;">댓글 내용</span>
-					<span><button id="submit">삭제</button></span>
-					<span><button id="submit">수정</button></span>
+					<span><button id="commentDelete">삭제</button></span>
+					<span><button id="commentUpdate">수정</button></span>
 				</div>
 			</div>
 		</div>
