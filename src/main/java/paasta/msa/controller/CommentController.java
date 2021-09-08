@@ -31,6 +31,7 @@ public class CommentController {
 	private static String SUCCESS = "SUCCESS";
 	
 	@RequestMapping(value = "/comments", method = RequestMethod.GET)
+	@ResponseBody
 	public Map<String, Object> getComments(@RequestParam(required = true) Integer boardSeq) {
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -38,7 +39,6 @@ public class CommentController {
 
 
 		paramMap.put("boardSeq", boardSeq.toString());
-
 		// Select CommentList
 		try {
 			result = commentService.getCommentList(paramMap);
@@ -85,7 +85,7 @@ public class CommentController {
 		try {
 			
 			result = commentService.postComment(paramMap);
-			if(SUCCESS.equals(result.get("result"))) {
+			if(!SUCCESS.equals(result.get("result"))) {
 				throw new Exception("코멘트 생성에 실패하였습니다.");
 			}
 			
@@ -106,7 +106,6 @@ public class CommentController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		System.out.println(paramMap);
 		// parameter Setting
 		try {
 
@@ -127,7 +126,6 @@ public class CommentController {
 		
 		try {
 			result = commentService.putComment(paramMap);
-			System.out.println(result);
 			if(!SUCCESS.equals(result.get("result"))) {
 				throw new Exception("코멘트 수정에 실패하였습니다.");
 			}
@@ -148,7 +146,6 @@ public class CommentController {
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		try {
-			System.out.println(paramMap);
 			result = commentService.deleteComment(paramMap);
 			if(!SUCCESS.equals(result.get("result"))) {
 				throw new Exception("코멘트 삭제에 실패하였습니다.");

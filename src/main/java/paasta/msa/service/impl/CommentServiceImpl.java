@@ -21,10 +21,6 @@ public class CommentServiceImpl implements CommentService {
 	@Value("#{apiProperties['ApiEndpoint']}")
 	private String apiEndpoint;
 
-	public Map<String, Object> getCommentCount(Map<String, String> paramMap) throws Exception {
-		Map<String, Object> result = restClient.get(apiEndpoint + "/comments/" + paramMap.get("boardSeq"), new HashMap<String, String>(), paramMap);
-		return result;
-	}
 
 	public Map<String, Object> getCommentList(Map<String, String> paramMap) throws Exception {
 		Map<String, Object> result = restClient.get(apiEndpoint + "/comments/" + paramMap.get("boardSeq"), new HashMap<String, String>(), paramMap);

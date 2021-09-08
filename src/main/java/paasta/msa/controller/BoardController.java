@@ -38,8 +38,6 @@ public class BoardController {
 	@RequestMapping(value = "/boardDetail")	
 	public String getBoardDetail(ModelMap model, @RequestParam Map<String, String> paramMap, @RequestParam(required = false) String boardSeq) throws Exception {
 		
-		model.put("type", "W");
-		
 		if (boardSeq != null) {
 			Map<String, Object> result = getBoardDetailJSON(paramMap);
 			model.put("resultData", result.get("resultData"));
@@ -47,6 +45,21 @@ public class BoardController {
 		}
 		
 		return "boardDetail";
+	}
+	@RequestMapping(value = "/boardUpdate")	
+	public String boardUpdate(ModelMap model, @RequestParam Map<String, String> paramMap, @RequestParam(required = false) String boardSeq) throws Exception {
+		
+		if (boardSeq != null) {
+			Map<String, Object> result = getBoardDetailJSON(paramMap);
+			model.put("resultData", result.get("resultData"));
+		}
+		
+		return "boardUpdate";
+	}
+	@RequestMapping(value = "/boardInsert")	
+	public String boardInsert() throws Exception {
+		
+		return "boardInsert";
 	}
 
 	@RequestMapping(value = "/boardJSON")
@@ -89,7 +102,6 @@ public class BoardController {
 	@ResponseBody
 	public Map<String, Object> getBoardUpdateJSON(@RequestParam Map<String, String> paramMap) throws Exception {
 		
-		paramMap.put("userId", "sjm8824"); //TODO 추후 로그인 사용자의 ID로 변경 필요
 		Map<String, Object> result = boardService.getBoardUpdate(paramMap);
 		
 		if("SUCCESS".equals(result.get("result"))) {

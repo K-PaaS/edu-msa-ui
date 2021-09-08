@@ -48,11 +48,6 @@ public class UserController {
 	
 	@RequestMapping(value = "/user/login")	
 	public String getLoginPage() throws Exception {
-		ValueOperations<String, String> ops = redisTemplate.opsForValue();
-		String test = "test1";
-		if(!this.redisTemplate.hasKey(test)) {
-			ops.set(test,"foo");
-		}
 		return "login";
 	}
 
@@ -64,16 +59,15 @@ public class UserController {
 	}
 
 	
-	@RequestMapping(value = "/user/getUser")	
+	@RequestMapping(value = "/user/userInfo")	
 	public String getUser(ModelMap model, @RequestParam Map<String, String> paramMap, @RequestParam(required = false) String userId) throws Exception {
-		
 		
 		if (userId != null) {
 			Map<String, Object> result = userService.getUser(paramMap);
 			model.put("resultData", result.get("resultData"));
 		}
 		
-		return "userDetail";
+		return "userInfo";
 	}
 	
 	@RequestMapping(value = "/user/loginUser", method = RequestMethod.POST)	
@@ -147,10 +141,26 @@ public class UserController {
 
 	@RequestMapping(value = "/user/deleteUser")
 	@ResponseBody
-	public Map<String, Object> deletUser(@RequestParam Map<String, String> paramMap) throws Exception {
+	public Map<String, Object> deletUser(HttpServletRequest request
+			, HttpServletResponse response, @RequestParam Map<String, String> paramMap) throws Exception {
 		
 		Map<String, Object> result = userService.deleteUser(paramMap);
-
+		
+		String sessionId = CookieUtils.getCookie(request, SESSION_ID).toString();
+		String userId = CookieUtils.getCookie(request, USER_ID).toString();
+		ValueOperations<String, String> pos = redisTemplate.opsForValue();
+		
+		if(sessionId != null) {
+			CookieUtils.deleteCookie(request, response, SESSION_ID);
+		}
+		
+		if(userId != null) {
+			CookieUtils.deleteCookie(request, response, USER_ID);
+		}
+		
+		if(pos.get(userId) != null) {
+			redisTemplate.opsForValue().getOperations().delete(String.valueOf(userId));
+		}
 		return result;
 	}
 	
