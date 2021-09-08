@@ -211,19 +211,12 @@ $.fn.search = function() {
 			</div>
 			<div class="noticeBtn" style="display:inline-block; margin:10px; float:right;">
                 <div >
-                    <button id="writeBtn" class="listBtn">등록</button>
+                	<c:if test="${cookie.session_id.value ne null}">
+                    	<button id="writeBtn" class="listBtn">등록</button>
+                    </c:if>
                 </div>
             </div>
 			<div id="pagination" class="paging pagination">
-				<!-- <a class="first nor" href="javascript:;">처음</a>
-				<a class="prev nor" href="javascript:;">이전</a>
-				<a class="on" href="javascript:;">1</a>
-				<a href="javascript:;">2</a>
-				<a href="javascript:;">3</a>
-				<a href="javascript:;">4</a>
-				<a href="javascript:;">5</a>
-				<a class="next" href="javascript:;">다음</a>
-				<a class="last" href="javascript:;">끝</a> -->
 			</div>
 		</div>
 		<!-- //Container -->
