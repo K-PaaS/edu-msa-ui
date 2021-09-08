@@ -209,7 +209,7 @@ function updateComment(commentSeq, comment){
                         <dd>
                             <dl>
                                 <dt>등록자</dt>
-                                <dd>${resultData.userName}</dd>
+                                <dd>${resultData.writeUserName}</dd>
                             </dl>
                             <dl>
                                 <dt>등록일</dt>
@@ -222,7 +222,7 @@ function updateComment(commentSeq, comment){
                     </div>
                     <div class="noticeBtn">
                         <div>
-                        	<c:if test="${cookie.userId.value eq resultData.userId}">
+                        	<c:if test="${ cookie.user_id.value eq resultData.writeUserId}">
 	                            <button id="writeBtn" class="editBtn">수정</button>
 	                            <button id="deleteBtn" class="delBtn">삭제</button>
                             </c:if>
