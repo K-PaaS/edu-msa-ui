@@ -5,8 +5,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import paasta.msa.common.RestClient;
 import paasta.msa.service.UserService;
@@ -17,9 +23,17 @@ public class UserServiceImpl implements UserService{
 	@Resource(name = "restClient")
 	private RestClient restClient;
 	
+	
 	@Value("#{apiProperties['ApiEndpoint']}")
 	private String apiEndpoint;
+	
+	// need to import
+	private final RestTemplate restTemplate;
 
+   @Autowired
+   public UserServiceImpl(RestTemplate restTemplate) {
+      this.restTemplate = restTemplate;
+   }
 	
 	public Map<String, Object> getUserList(Map<String, String> paramMap) throws Exception {
 		Map<String, Object> result = restClient.get(apiEndpoint + "/user/", new HashMap<String, String>(), paramMap);
@@ -35,6 +49,7 @@ public class UserServiceImpl implements UserService{
 		Map<String, Object> result = restClient.post(apiEndpoint + "/user/checkLogin/", new HashMap<String, String>(), paramMap);
 		return result;
 	}
+	
 
 	public Map<String, Object> createUser(Map<String, String> paramMap) throws Exception {
 		Map<String, Object> result = restClient.post(apiEndpoint + "/user/", new HashMap<String, String>(), paramMap);

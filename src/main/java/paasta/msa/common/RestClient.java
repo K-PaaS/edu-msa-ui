@@ -24,7 +24,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,108 +40,62 @@ public class RestClient {
 	
 	@Resource(name = "apiProperties")
 	private Properties apiProperties;
+	
+	// need to import
+	private final RestTemplate restTemplate;
 
-	private Map<String, Object> call(HttpUriRequest request) throws Exception {
-        //http client 생성
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setRedirectStrategy(new LaxRedirectStrategy())
-                .build();
-
-        StringBuffer response = null;
-        try {
-            //get 요청
-            CloseableHttpResponse httpResponse = httpClient.execute(request);
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-
-            if(statusCode == 200) {
-                BufferedReader reader = null;
-         
-                try {
-                	reader = new BufferedReader(new InputStreamReader(
-                            httpResponse.getEntity().getContent(), "UTF-8"));
-                    String inputLine;
-                    response = new StringBuffer();
-             
-                    while ((inputLine = reader.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                } catch (Exception e) {
-                	throw e;
-                } finally {
-                	try {reader.close();} catch (Exception e) {}
-                }
-                
-            } else if (statusCode == 301 || statusCode == 302) {
-            	
-            	for(Header header : httpResponse.getHeaders("Location")) {
-                	throw new RedirectException(statusCode, header.getValue());
-            	}
-
-            } else {
-            	throw new Exception("http 접속이 정상 종료되지 않았습니다. : " + statusCode);
-            }
-        } catch (Exception e) {
-        	throw e;
-        } finally {
-            httpClient.close();
-        }
-        Map<String, Object> result = new ObjectMapper().readValue(response.toString(), new TypeReference<Map<String, Object>>() { });
-
-        return result;
-	}
+   @Autowired
+   public RestClient(RestTemplate restTemplate) {
+      this.restTemplate = restTemplate;
+   }
 
 	public Map<String, Object> get(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
- 
-        Set<String> keySet = paramMap.keySet();
-        Iterator<String> it = keySet.iterator();
-        StringBuffer paramStringBf = new StringBuffer();
-
-        while(it.hasNext()) {
-        	String key = it.next();
-        	paramStringBf.append(key);
-        	paramStringBf.append("=");
-        	paramStringBf.append(paramMap.get(key));
-        	paramStringBf.append("&");
-        }
+		
+		HttpHeaders headers = new HttpHeaders();
+		Set<String> keySet = paramMap.keySet();
+		Iterator<String> it = keySet.iterator();
+		StringBuffer paramStringBf = new StringBuffer();
+		
+		while(it.hasNext()) {
+			String key = it.next();
+			paramStringBf.append(key);
+			paramStringBf.append("=");
+			paramStringBf.append(paramMap.get(key));
+			paramStringBf.append("&");
+		}
 		String paramString = paramStringBf.toString();
 		if(!"".equals(paramString)) {
 			paramString = "?" + paramString.substring(0, paramString.length() -1);
 		}
-        //get 메서드와 URL 설정
-        HttpGet httpGet = new HttpGet(url + paramString);
- 
-        keySet = headerMap.keySet();
-        it = keySet.iterator();
-        
-        // 암호화 키 추가
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
-        String apiKey = makeKey(timestamp);
-
-        httpGet.addHeader("Content-Type", "application/json;charset=UTF-8");
-        httpGet.addHeader("apiKey", apiKey);
-        httpGet.addHeader("timestamp", timestamp);
-
-        while(it.hasNext()) {
-        	String key = it.next();
-            httpGet.addHeader(key, headerMap.get(key));
-        }
-        
-        
-        return call(httpGet);
+		
+		keySet = headerMap.keySet();
+		it = keySet.iterator();
+		
+		// 암호화 키 추가
+		String timestamp = new Timestamp(System.currentTimeMillis()).toString();
+		String apiKey = makeKey(timestamp);
+		
+		while(it.hasNext()) {
+			String key = it.next();
+			headers.add(key, headerMap.get(key));
+		}
+		
+        headers.add("apiKey", apiKey);
+        headers.add("Content-Type", "application/json;charset=UTF-8");
+        headers.add("timestamp", timestamp);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(paramMap, headers);
+        ResponseEntity<Map> resEntity = restTemplate.exchange(url + paramString, HttpMethod.GET, requestEntity, Map.class);
+		
+		return resEntity.getBody();
 	}
 	
 	public Map<String, Object> post(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
 		 
         //get 메서드와 URL 설정
-		HttpPost httpPost = new HttpPost(url);
+		HttpHeaders headers = new HttpHeaders();
         Map<String, Object> result = null;
-		ObjectMapper mapper = new ObjectMapper();
         
         try {
-        	String json = mapper.writeValueAsString(paramMap);
-        	System.out.println(url);
-        	System.out.println(json);
-        	httpPost.setEntity(new StringEntity(json, "UTF-8"));
         	
 	        Set<String> keySet = headerMap.keySet();
 	        Iterator<String> it = keySet.iterator();
@@ -143,20 +103,21 @@ public class RestClient {
 	        // 암호화 키 추가
 	        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
 	        String apiKey = makeKey(timestamp);
-	        httpPost.addHeader("Content-Type", "application/json;charset=UTF-8");
-	        httpPost.addHeader("apiKey", apiKey);
-	        httpPost.addHeader("timestamp", timestamp);
 	
 	        while(it.hasNext()) {
 	        	String key = it.next();
-	        	httpPost.addHeader(key, headerMap.get(key));
+	        	headers.add(key, headerMap.get(key));
 	        }
 	        
-	        result = call(httpPost);
+	        headers.add("apiKey", apiKey);
+	        headers.add("Content-Type", "application/json;charset=UTF-8");
+	        headers.add("timestamp", timestamp);
+	        HttpEntity<Object> requestEntity = new HttpEntity<>(paramMap, headers);
+	        ResponseEntity<Map> resEntity = restTemplate.exchange(url , HttpMethod.POST, requestEntity, Map.class);
+			
+	        result = resEntity.getBody();
 	        
 	        System.out.println(result);
-        } catch (RedirectException e) {
-        	result = post(e.url, headerMap, paramMap);
         } catch (Exception e) {
         	throw e;
         }
@@ -166,13 +127,10 @@ public class RestClient {
 	public Map<String, Object> put(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
 		 
         //get 메서드와 URL 설정
-		HttpPut httpPut = new HttpPut(url);
+		HttpHeaders headers = new HttpHeaders();
         Map<String, Object> result = null;
-		ObjectMapper mapper = new ObjectMapper();
         
         try {
-        	String json = mapper.writeValueAsString(paramMap);
-        	httpPut.setEntity(new StringEntity(json, "UTF-8"));
         	
 	        Set<String> keySet = headerMap.keySet();
 	        Iterator<String> it = keySet.iterator();
@@ -180,18 +138,20 @@ public class RestClient {
 	        // 암호화 키 추가
 	        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
 	        String apiKey = makeKey(timestamp);
-	        httpPut.addHeader("Content-Type", "application/json;charset=UTF-8");
-	        httpPut.addHeader("apiKey", apiKey);
-	        httpPut.addHeader("timestamp", timestamp);
 	
 	        while(it.hasNext()) {
 	        	String key = it.next();
-	        	httpPut.addHeader(key, headerMap.get(key));
+	        	headers.add(key, headerMap.get(key));
 	        }
 	        
-	        result = call(httpPut);
-        } catch (RedirectException e) {
-        	result = put(e.url, headerMap, paramMap);
+	        headers.add("apiKey", apiKey);
+	        headers.add("Content-Type", "application/json;charset=UTF-8");
+	        headers.add("timestamp", timestamp);
+	        HttpEntity<Object> requestEntity = new HttpEntity<>(paramMap, headers);
+	        ResponseEntity<Map> resEntity = restTemplate.exchange(url , HttpMethod.PUT, requestEntity, Map.class);
+			
+	        result = resEntity.getBody();
+	        
         } catch (Exception e) {
         	throw e;
         }
@@ -201,7 +161,7 @@ public class RestClient {
 	public Map<String, Object> delete(String url, Map<String, String> headerMap) throws Exception {
 		 
         //get 메서드와 URL 설정
-		HttpDelete httpDelete = new HttpDelete(url);
+		HttpHeaders headers = new HttpHeaders();
         Map<String, Object> result = null;
         
         try {
@@ -212,18 +172,19 @@ public class RestClient {
 	        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
 	        String apiKey = makeKey(timestamp);
 	
-	        httpDelete.addHeader("Content-Type", "text/plain;charset=UTF-8");
-	        httpDelete.addHeader("apiKey", apiKey);
-	        httpDelete.addHeader("timestamp", timestamp);
 	
 	        while(it.hasNext()) {
 	        	String key = it.next();
-	        	httpDelete.addHeader(key, headerMap.get(key));
+	        	headers.add(key, headerMap.get(key));
 	        }
+	        headers.add("apiKey", apiKey);
+	        headers.add("Content-Type", "application/json;charset=UTF-8");
+	        headers.add("timestamp", timestamp);
+	        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+	        ResponseEntity<Map> resEntity = restTemplate.exchange(url , HttpMethod.DELETE, requestEntity, Map.class);
+			
+	        result = resEntity.getBody();
 	        
-	        result = call(httpDelete);
-        } catch (RedirectException e) {
-        	result = delete(e.url, headerMap);
         } catch (Exception e) {
         	throw e;
         }
