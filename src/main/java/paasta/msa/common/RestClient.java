@@ -117,7 +117,6 @@ public class RestClient {
 			
 	        result = resEntity.getBody();
 	        
-	        System.out.println(result);
         } catch (Exception e) {
         	throw e;
         }

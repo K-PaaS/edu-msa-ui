@@ -54,7 +54,6 @@ public class UserController {
 	@RequestMapping(value = "/user/createUser")
 	@ResponseBody
 	public Map<String, Object> createUser(@RequestParam Map<String, String> paramMap) throws Exception {
-		System.out.println("paramMap : " + paramMap);
 		Map<String, Object> result = userService.createUser(paramMap);
 		return result;
 	}
