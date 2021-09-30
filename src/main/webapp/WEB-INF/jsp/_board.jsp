@@ -252,11 +252,11 @@ input[type=text] {
 </head>
 <body>
 	<div class="header" style="text-align: right; padding: 3px;">
-		<c:if test="${cookie.session_id.value eq null}">
+		<c:if test="${session.session_id.value eq null}">
 			<span id="btnJoin" style="float:left;" class="button">회원가입</span>
 			<span id="btnLogin" style="float:left;" class="button">로그인</span>
 		</c:if>
-		<c:if test="${cookie.session_id.value ne null}">
+		<c:if test="${session.session_id.value ne null}">
 			<span id="btnLogout" style="float:left;" class="button">로그아웃</span>
 		</c:if>
  	</div>
@@ -304,7 +304,7 @@ input[type=text] {
 					</select>
 					<input type="text" name="searchValue" onKeypress="javascript:if(event.keyCode==13) {$.fn.search();}"/>
 					<span id="selectBtn" class="button">검색</span>
-					<c:if test="${cookie.session_id.value ne null}">
+					<c:if test="${session.session_id.value ne null}">
 						<span id="writeBtn" class="button">등록</span>
 					</c:if>
 				</div>

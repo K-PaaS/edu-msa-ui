@@ -22,8 +22,8 @@ $(document).ready(function(){
 			var paramMap = new Map();
 			paramMap["boardTitle"] = $('#boardTitle').val();
 			paramMap["boardText"] = $('#boardText').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			$.ajax({
 			    url:'./boardCreateJSON',
@@ -58,12 +58,12 @@ $(document).ready(function(){
 					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="PaaS-TA로고"></a>
 				</h1>
 				<div>
-					<c:if test="${cookie.session_id.value eq null}">
+					<c:if test="${sessionScope.session_id eq null}">
 						<a href="<c:url value='/user/join' />">회원가입</a>
 						<a href="<c:url value='/user/login' />">로그인</a>
 					</c:if>
-					<c:if test="${cookie.session_id.value ne null}">
-						<a href="<c:url value='/user/userInfo' />?userId=${cookie.user_id.value}">My Page</a>
+					<c:if test="${sessionScope.session_id ne null}">
+						<a href="<c:url value='/user/userInfo' />?userId=${sessionScope.user_id}">My Page</a>
 						<a href="<c:url value='/user/logout' />">로그아웃</a>
 					</c:if>
 				</div>

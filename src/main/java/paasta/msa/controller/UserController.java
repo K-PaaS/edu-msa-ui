@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import paasta.msa.common.CookieUtils;
 import paasta.msa.service.UserService;
 
 /**
@@ -75,13 +75,15 @@ public class UserController {
 	public  Map<String, Object> loginUser(@RequestParam Map<String, String> paramMap
 							, HttpServletRequest request
 							, HttpServletResponse response) throws Exception {
-		String sessionId = CookieUtils.getCookie(request, SESSION_ID).toString();
+		HttpSession session = request.getSession();
+		String sessionId = (String)session.getAttribute(SESSION_ID);
 		ValueOperations<String, String> pos = redisTemplate.opsForValue();
 		String userId = paramMap.get("userId");
 		
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		
 		retMap.put("result", this.ERROR);
+		System.out.println("SESSION_ID : " + sessionId);
 		
 		if (userId != null) {
 			if( sessionId == null || "".equals(sessionId) || !sessionId.equals(pos.get(userId))) {
@@ -91,9 +93,9 @@ public class UserController {
 				
 				if(SUCCESS.equals(result.get("result"))) {
 					pos.set(userId, newSessionId);
-					CookieUtils.addCookie(response, SESSION_ID, newSessionId, -1);
-					CookieUtils.addCookie(response, USER_ID, userId, -1);
-					CookieUtils.addCookie(response, USER_NAME, (String)userMap.get("userName"), -1);
+					session.setAttribute(SESSION_ID, newSessionId);
+					session.setAttribute(USER_ID, userId);
+					session.setAttribute(USER_NAME, (String)userMap.get("userName"));
 				}
 				
 				retMap.put("result", result.get("result"));
@@ -110,16 +112,18 @@ public class UserController {
 	@RequestMapping(value = "/user/logout", method = RequestMethod.GET)	
 	public  String logout(HttpServletRequest request
 										, HttpServletResponse response) throws Exception {
-		String sessionId = CookieUtils.getCookie(request, SESSION_ID).toString();
-		String userId = CookieUtils.getCookie(request, USER_ID).toString();
+		HttpSession session = request.getSession();
+		String sessionId = (String)session.getAttribute(SESSION_ID);
+		String userId = session.getAttribute(USER_ID).toString();
 		ValueOperations<String, String> pos = redisTemplate.opsForValue();
 		
 		if(sessionId != null) {
-			CookieUtils.deleteCookie(request, response, SESSION_ID);
+			session.removeAttribute(SESSION_ID);
 		}
 		
 		if(userId != null) {
-			CookieUtils.deleteCookie(request, response, USER_ID);
+			session.removeAttribute(USER_ID);
+			session.removeAttribute(USER_NAME);
 		}
 		
 		if(pos.get(userId) != null) {
@@ -145,17 +149,19 @@ public class UserController {
 			, HttpServletResponse response, @RequestParam Map<String, String> paramMap) throws Exception {
 		
 		Map<String, Object> result = userService.deleteUser(paramMap);
+		HttpSession session = request.getSession();
+		String sessionId = (String)session.getAttribute(SESSION_ID);
 		
-		String sessionId = CookieUtils.getCookie(request, SESSION_ID).toString();
-		String userId = CookieUtils.getCookie(request, USER_ID).toString();
+		String userId = session.getAttribute(USER_ID).toString();
 		ValueOperations<String, String> pos = redisTemplate.opsForValue();
 		
 		if(sessionId != null) {
-			CookieUtils.deleteCookie(request, response, SESSION_ID);
+			session.removeAttribute(SESSION_ID);
 		}
 		
 		if(userId != null) {
-			CookieUtils.deleteCookie(request, response, USER_ID);
+			session.removeAttribute(USER_ID);
+			session.removeAttribute(USER_NAME);
 		}
 		
 		if(pos.get(userId) != null) {

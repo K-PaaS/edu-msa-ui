@@ -38,8 +38,8 @@ $(document).ready(function(){
 			var paramMap = new Map();
 			paramMap["comment"] = $('#comment-input').val();
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			$.ajax({
 			    url:'./comments',
@@ -59,8 +59,8 @@ $(document).ready(function(){
 	$('#deleteBtn').click(function(){
 		var result = confirm('삭제하시겠습니까?');			
 		if(result) {
-			$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
-			$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
+			$('#writeForm').children('input[name="writeUserId"]').val('${sessionScope.user_id}');
+			$('#writeForm').children('input[name="writeUserName"]').val('${sessionScope.user_name}');
 			$.ajax({
 			    url:'./boardDeleteJSON',
 		        type:'post',
@@ -98,7 +98,7 @@ $.fn.drawComment = function() {
 						commentHmtl += "<p>" + commentList[i].comment + "</p>";
 						commentHmtl += "<div><textarea id=\"update" + commentList[i].commentSeq + "\" placeholder=\"수정\" title=\"수정\">" + commentList[i].comment + "</textarea><a href=\"javascript:;clickCommentCancel(" + commentList[i].commentSeq + ")\">취소</a></div>";
 						commentHmtl += "</dt><dd>" + commentList[i].createDt + "</dd></dl>";
-						if(commentList[i].writeUserId == '${cookie.user_id.value}') {
+						if(commentList[i].writeUserId == '${sessionScope.user_id}') {
 							commentHmtl += "<div class=\"commentBtn\"><button onClick=\"javascript:clickCommentUpdate(" + commentList[i].commentSeq + ")\">수정</button>"; 
 							commentHmtl += "<button onClick=\"javascript:clickCommentDelete(" + commentList[i].commentSeq + ")\">삭제</button></div>"; 
 						}
@@ -130,8 +130,8 @@ function clickCommentDelete(commentSeq) {
 		var paramMap = new Map();
 		paramMap["commentSeq"] = commentSeq;
 		paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-		paramMap["writeUserId"] = '${cookie.user_id.value}';
-		paramMap["writeUserName"] = '${cookie.user_name.value}';
+		paramMap["writeUserId"] = '${sessionScope.user_id}';
+		paramMap["writeUserName"] = '${sessionScope.user_name}';
 		
 		$.ajax({
 		    url:'./deleteComment',
@@ -155,8 +155,8 @@ function updateComment(commentSeq, comment){
 		paramMap["commentSeq"] = commentSeq;
 		paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
 		paramMap["comment"] = comment;
-		paramMap["writeUserId"] = '${cookie.user_id.value}';
-		paramMap["writeUserName"] = '${cookie.user_name.value}';
+		paramMap["writeUserId"] = '${sessionScope.user_id}';
+		paramMap["writeUserName"] = '${sessionScope.user_name}';
 		
 		$.ajax({
 		    url:'./updateComment',
@@ -188,12 +188,12 @@ function updateComment(commentSeq, comment){
 					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="PaaS-TA로고"></a>
 				</h1>
 				<div>
-					<c:if test="${cookie.session_id.value eq null}">
+					<c:if test="${sessionScope.sessionScope_id eq null}">
 						<a href="<c:url value='/user/join' />">회원가입</a>
 						<a href="<c:url value='/user/login' />">로그인</a>
 					</c:if>
-					<c:if test="${cookie.session_id.value ne null}">
-						<a href="<c:url value='/user/userInfo' />?userId=${cookie.user_id.value}">My Page</a>
+					<c:if test="${sessionScope.sessionScope_id ne null}">
+						<a href="<c:url value='/user/userInfo' />?userId=${sessionScope.user_id}">My Page</a>
 						<a href="<c:url value='/user/logout' />">로그아웃</a>
 					</c:if>
 				</div>
@@ -222,7 +222,7 @@ function updateComment(commentSeq, comment){
                     </div>
                     <div class="noticeBtn">
                         <div>
-                        	<c:if test="${ cookie.user_id.value eq resultData.writeUserId}">
+                        	<c:if test="${ sessionScope.user_id eq resultData.writeUserId}">
 	                            <button id="writeBtn" class="editBtn">수정</button>
 	                            <button id="deleteBtn" class="delBtn">삭제</button>
                             </c:if>

@@ -29,8 +29,8 @@ $(document).ready(function(){
 			if(result) {
 				$('#writeForm').children('input[name="boardTitle"]').val($('#boardTitle').val());
 				$('#writeForm').children('input[name="boardText"]').val($('#boardText').val());
-				$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
-				$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
+				$('#writeForm').children('input[name="writeUserId"]').val('${`.user_id}');
+				$('#writeForm').children('input[name="writeUserName"]').val('${sessionScope.user_name}');
 				
 				$.ajax({
 				    url:'./boardUpdateJSON',
@@ -61,8 +61,8 @@ $(document).ready(function(){
 			if(result) {
 				$('#writeForm').children('input[name="boardTitle"]').val($('#boardTitle').val());
 				$('#writeForm').children('input[name="boardText"]').val($('#boardText').val());
-				$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
-				$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
+				$('#writeForm').children('input[name="writeUserId"]').val('${sessionScope.user_id}');
+				$('#writeForm').children('input[name="writeUserName"]').val('${sessionScope.user_name}');
 				
 				$.ajax({
 				    url:'./boardCreateJSON',
@@ -98,8 +98,8 @@ $(document).ready(function(){
 			var paramMap = new Map();
 			paramMap["comment"] = $('#comment-input').val();
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -127,8 +127,8 @@ $(document).ready(function(){
 			paramMap["commentSeq"] = 20;
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
 			paramMap["comment"] = "TESTTESTSETSETEST";
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -154,8 +154,8 @@ $(document).ready(function(){
 			/* paramMap["commentSeq"] = $('#comment-input').val(); */
 			paramMap["commentSeq"] = 21;
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -189,8 +189,8 @@ $(document).ready(function(){
 	$('#deleteBtn').click(function(){
 		var result = confirm('삭제하시겠습니까?');			
 		if(result) {
-			$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
-			$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
+			$('#writeForm').children('input[name="writeUserId"]').val('${sessionScope.user_id}');
+			$('#writeForm').children('input[name="writeUserName"]').val('${sessionScope.user_name}');
 			$.ajax({
 			    url:'./boardDeleteJSON',
 		        type:'post',
@@ -245,8 +245,8 @@ $(document).ready(function(){
 			var paramMap = new Map();
 			paramMap["comment"] = $('#comment-input').val();
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -274,8 +274,8 @@ $(document).ready(function(){
 			paramMap["commentSeq"] = 20;
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
 			paramMap["comment"] = "TESTTESTSETSETEST";
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -301,8 +301,8 @@ $(document).ready(function(){
 			/* paramMap["commentSeq"] = $('#comment-input').val(); */
 			paramMap["commentSeq"] = 21;
 			paramMap["boardSeq"] = $('input[name="boardSeq"]').val();
-			paramMap["writeUserId"] = '${cookie.user_id.value}';
-			paramMap["writeUserName"] = '${cookie.user_name.value}';
+			paramMap["writeUserId"] = '${sessionScope.user_id}';
+			paramMap["writeUserName"] = '${sessionScope.user_name}';
 			
 			console.log(paramMap);
 			$.ajax({
@@ -336,8 +336,8 @@ $(document).ready(function(){
 	$('#deleteBtn').click(function(){
 		var result = confirm('삭제하시겠습니까?');			
 		if(result) {
-			$('#writeForm').children('input[name="writeUserId"]').val('${cookie.user_id.value}');
-			$('#writeForm').children('input[name="writeUserName"]').val('${cookie.user_name.value}');
+			$('#writeForm').children('input[name="writeUserId"]').val('${sessionScope.user_id}');
+			$('#writeForm').children('input[name="writeUserName"]').val('${sessionScope.user_name}');
 			$.ajax({
 			    url:'./boardDeleteJSON',
 		        type:'post',
@@ -513,7 +513,7 @@ input[type=text] {
 					</tbody>
 				</table>
 				<div style="padding-top: 10px;float:left"><span id="listBtn" class="button">목록</span></div>
-				<c:if test="${cookie.userId.value eq resultData.userId}">
+				<c:if test="${sessionScope.userId eq resultData.userId}">
 					<div class="right" style="padding-top: 10px;"><span id="writeBtn" class="button">등록</span> <span id="deleteBtn" class="button read" value="${resultData.boardSeq}">삭제</span><span id="cancelBtn" class="button" style="display:none;">취소</span></div>
 				</c:if>
 		</article>
