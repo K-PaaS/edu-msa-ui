@@ -5,6 +5,7 @@ applications:
   host: edu-msa-ui
   path: ./target/edu-msa-ui-1.0.0.war
   buildpack: java_buildpack
+  instances: 2
 env:
   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
   
