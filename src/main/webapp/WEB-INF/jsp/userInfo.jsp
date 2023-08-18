@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="../../images/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="../../css/layout.css">
 	<script src="/js/jquery-3.6.0.min.js"></script>
-	<title>파스-타 활용 교육실습포털</title>
+	<title>K-PaaS 활용 교육실습포털</title>
 </head>
 <script>
 $(document).ready(function(){
@@ -84,7 +84,7 @@ $(document).ready(function(){
 		<header>
 			<div>
 				<h1>
-					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="PaaS-TA로고"></a>
+					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="K-PaaS로고"></a>
 				</h1>
 				<div>
 					<c:if test="${sessionScope.session_id eq null}">
@@ -144,13 +144,13 @@ $(document).ready(function(){
             <div>
                 <div class="company">
                     <div>
-                        <a href="https://www.facebook.com/PaaS-TA-136351040351980/"><img src="../../images/facebook.png" target="_blank" alt="페이스북" /></a>
-                        <a href="https://twitter.com/PaaS_TA" target="_blank"><img src="../../images/tw.png" alt="트위터" /></a>
+                        <a href="https://www.facebook.com/K-PaaS-136351040351980/"><img src="../../images/facebook.png" target="_blank" alt="페이스북" /></a>
+                        <a href="https://twitter.com/K_PaaS" target="_blank"><img src="../../images/tw.png" alt="트위터" /></a>
                     </div>
                 </div>
                 <div class="company-info">
 					<div>
-						<h5>개방형 클라우드플랫폼 센터 PaaS-TA</h5>
+						<h5>개방형 클라우드플랫폼 센터 K-PaaS</h5>
 						<address>서울시 중구 세종대로 39 서울상공회의소 7F</address>
 						<a href="#">위치안내</a>
 					</div>
@@ -162,10 +162,10 @@ $(document).ready(function(){
 						</dl>
 						<dl>
 							<dt>문의메일</dt>
-							<dd><a href="mailto:paasta@paas-ta.kr">paasta@paas-ta.ta.kr</a></dd>
+							<dd><a href="mailto:kpaas@k-paas.kr">kpaas@k-paas.ta.kr</a></dd>
 						</dl>
 					</div>
-					<p>COPYRIGHT 2020 PaaS-TA. ALL RIGHTS RESERVED.</p>
+					<p>COPYRIGHT 2020 K-PaaS. ALL RIGHTS RESERVED.</p>
                 </div>
             </div>
         </footer>

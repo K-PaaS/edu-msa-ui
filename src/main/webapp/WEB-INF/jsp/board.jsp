@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="../../css/layout.css">
 	<script src="/js/jquery-3.6.0.min.js"></script>
 
-	<title>파스-타 활용 교육실습포털</title>
+	<title>K-PaaS 활용 교육실습포털</title>
 </head>
 <script>
 $(document).ready(function(){
@@ -126,7 +126,7 @@ $.fn.search = function() {
 		<header>
 			<div>
 				<h1>
-					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="PaaS-TA로고"></a>
+					<a href="<c:url value='/board' />"><img src="../../images/logo_header.png" alt="K-PaaS로고"></a>
 				</h1>
 				<div>
 					<c:if test="${sessionScope.session_id eq null}">
@@ -205,7 +205,7 @@ $.fn.search = function() {
 			<!-- 서치값 없을 때 class="on"추가-->
 			<div class="searchno">
 				<dl>
-					<dt><span>'파스타 배포'</span>에 대한 검색결과가 없습니다.</dt>
+					<dt><span>'K-PaaS 배포'</span>에 대한 검색결과가 없습니다.</dt>
 					<dd>단어의 철자가 정확한지 확인해 보세요.<br />한글을 영어로 혹인 영어를 한글로 입력했는지 확인해 보세요.<br />검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</dd>
 				</dl>
 			</div>
@@ -227,13 +227,13 @@ $.fn.search = function() {
                     <ul>
                     </ul>
                     <div>
-                        <a href="https://www.facebook.com/PaaS-TA-136351040351980/"><img src="../images/facebook.png" target="_blank" alt="페이스북" /></a>
-                        <a href="https://twitter.com/PaaS_TA" target="_blank"><img src="../images/tw.png" alt="트위터" /></a>
+                        <a href="https://www.facebook.com/K-PaaS-136351040351980/"><img src="../images/facebook.png" target="_blank" alt="페이스북" /></a>
+                        <a href="https://twitter.com/K_PaaS" target="_blank"><img src="../images/tw.png" alt="트위터" /></a>
                     </div>
                 </div>
                 <div class="company-info">
 					<div>
-						<h5>개방형 클라우드플랫폼 센터 PaaS-TA</h5>
+						<h5>개방형 클라우드플랫폼 센터 K-PaaS</h5>
 						<address>서울시 중구 세종대로 39 서울상공회의소 7F</address>
 						<a href="#">위치안내</a>
 					</div>
@@ -245,10 +245,10 @@ $.fn.search = function() {
 						</dl>
 						<dl>
 							<dt>문의메일</dt>
-							<dd><a href="mailto:paasta@paas-ta.kr">paasta@paas-ta.ta.kr</a></dd>
+							<dd><a href="mailto:kpaas@k-paas.kr">k-paas@k-paas.ta.kr</a></dd>
 						</dl>
 					</div>
-					<p>COPYRIGHT 2020 PaaS-TA. ALL RIGHTS RESERVED.</p>
+					<p>COPYRIGHT 2020 K-PaaS. ALL RIGHTS RESERVED.</p>
                 </div>
             </div>
         </footer>
