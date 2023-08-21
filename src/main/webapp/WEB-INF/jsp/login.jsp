@@ -105,12 +105,13 @@
 		<!-- Footer -->
         <footer>
             <div>
+
                 <div class="company">
                     <div>
-                        <a href="https://www.facebook.com/K-PaaS-136351040351980/"><img src="../images/facebook.png" target="_blank" alt="페이스북" /></a>
-                        <a href="https://twitter.com/K_PaaS" target="_blank"><img src="../images/tw.png" alt="트위터" /></a>
+
                     </div>
                 </div>
+
                 <div class="company-info">
 					<div>
 						<h5>개방형 클라우드플랫폼 센터 K-PaaS</h5>

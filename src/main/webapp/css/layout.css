@@ -304,7 +304,9 @@ table tr td a {display:block; overflow:hidden; text-overflow: ellipsis; white-sp
 
 
 /*------------------ Notice View ------------------*/
-.detail {border-bottom:1px solid #ebebeb; margin-top:80px;}
+.detail {border-bottom:0px solid #ebebeb; margin-top:80px;}
+
+
 /* con */
 .detail .con {padding-bottom:50px;}
 .detail .con > dl {margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #ebebeb; }
@@ -372,10 +374,12 @@ footer div .company ul li:first-child {margin-left:0; padding-left:0;}
 footer div .company ul li:before {content:""; width:2px; height:10px; background-color:#ebebeb; position:absolute; top:24px; left:0;}
 footer div .company ul li:first-child:before {content:""; width:0;}
 footer div .company ul li a:hover {text-decoration:underline;}
-footer div .company > div {float:right; overflow:hidden; margin-top:23px;}
+footer div .company > div {float:right; overflow:hidden; margin-top:48px;} //여기 고치면 벌어짐
+
 footer div .company > div > a {float:left;}
 footer div .company > div > a:first-child {margin-right:55px; position:relative;}
 footer div .company > div > a:first-child:after {content:""; width:2px; height:10px; background-color:#ebebeb; position:absolute; top:4px; left:37px;}
+
 footer div .company-info {padding-top:37px; padding-left:150px; line-height:25px; letter-spacing:-0.5px; background:url("../images/footer_logo.png") no-repeat 0 0; background-position:0 43px; color:#a0a0a0;}
 footer div .company-info > div {display:flex;}
 footer div .company-info > div h5 {font-size:15px; font-weight:200; position:relative; padding-right:10px; margin-right:7px; line-height:25px;}

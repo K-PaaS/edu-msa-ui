@@ -103,21 +103,11 @@ $(document).ready(function(){
         <footer>
             <div>
                 <div class="company">
-                    <ul>
-                        <li>
-                            <a href="#">COMPANY</a>
-                        </li>
-                        <li>
-                            <a href="#">사이트 이용약관</a>
-                        </li>
-                        <li>
-                            <a href="#">개인정보취급방침</a>
-                        </li>
-                    </ul>
+                   
                     <div>
-                        <a href="https://www.facebook.com/K-PaaS-136351040351980/"><img src="../images/facebook.png" target="_blank" alt="페이스북" /></a>
-                        <a href="https://twitter.com/K_PaaS" target="_blank"><img src="../images/tw.png" alt="트위터" /></a>
+
                     </div>
+                    
                 </div>
                 <div class="company-info">
 					<div>
